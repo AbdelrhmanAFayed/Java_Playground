@@ -41,7 +41,7 @@ public class ball extends Applet implements Runnable
 		yoffset-- ;
 		}
 		
-		if(yoffset > this.getHeight())
+		if(yoffset > this.getHeight() - 150 )
 		{
 		yflag = false ; 
 		}
@@ -51,7 +51,7 @@ public class ball extends Applet implements Runnable
 		yflag = true ; 
 		}
 		
-		if(xoffset > this.getWidth())
+		if(xoffset > this.getWidth() - 150)
 		{
 		xflag = false ; 
 		}
