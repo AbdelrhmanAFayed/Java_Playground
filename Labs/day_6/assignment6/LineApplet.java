@@ -124,7 +124,7 @@ public class LineApplet extends Applet{
 		
 	public void paint(Graphics g)
 	{
-		for(itr = 0 ; itr < state ; itr++)
+		for(itr = 0 ; itr < lines.length ; itr++)
 		{
 	if (lines[itr] != null) {	g.drawLine(lines[itr].startPoint.x,lines[itr].startPoint.y,lines[itr].endPoint.x,lines[itr].endPoint.y);
 		}

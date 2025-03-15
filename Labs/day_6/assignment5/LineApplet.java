@@ -9,9 +9,10 @@ import java.awt.event.*;
 
 public class LineApplet extends Applet{
 	
+
 	class MyLine
 	{
-		class point
+		class point	
 		{
 		public int x = 0 ;
 		public int y = 0 ;
