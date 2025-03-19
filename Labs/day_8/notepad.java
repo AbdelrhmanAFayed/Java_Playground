@@ -1,5 +1,7 @@
 
-import java.io.File;
+import java.io.*;
+import java.io.FilterInputStream.*;
+
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -19,7 +21,7 @@ public class notepad extends Application {
     Menu file;
     Menu edit;
     Menu help;
-    MenuItem fileoptions[] = new MenuItem[5];
+    MenuItem fileoptions[] = new MenuItem[7];
     MenuItem editoptions[] = new MenuItem[8];
     MenuItem helpoptions[] = new MenuItem[1];
     TextArea ta;
@@ -32,10 +34,14 @@ public class notepad extends Application {
         
     
         fileoptions[0] = new MenuItem("New");
-        fileoptions[1] = new MenuItem("Open...");
-        fileoptions[2] = new MenuItem("Save");
-        fileoptions[3] = new SeparatorMenuItem();
-        fileoptions[4] = new MenuItem("Exit");
+        fileoptions[1] = new MenuItem("Open LOW");
+        fileoptions[2] = new MenuItem("Open HIGH");
+        
+        fileoptions[3] = new MenuItem("Save LOW");
+        fileoptions[4] = new MenuItem("Save HIGH");
+        
+        fileoptions[5] = new SeparatorMenuItem();
+        fileoptions[6] = new MenuItem("Exit");
         
         editoptions[0] = new MenuItem("Undo");
         editoptions[1] = new SeparatorMenuItem();
@@ -55,6 +61,9 @@ public class notepad extends Application {
         file.getItems().add(fileoptions[2]);
         file.getItems().add(fileoptions[3]);
         file.getItems().add(fileoptions[4]);
+        file.getItems().add(fileoptions[5]);
+        file.getItems().add(fileoptions[6]);
+
 
         edit=new Menu("Edit");
         edit.getItems().add(editoptions[0]);
@@ -90,26 +99,142 @@ public class notepad extends Application {
          fileoptions[1].setOnAction(new EventHandler<ActionEvent>(){
             public void handle(ActionEvent event) {
                 FileChooser fileChooser = new FileChooser();
-                fileChooser.setTitle("Open File");
+                fileChooser.setTitle("Open LOW File");
                 File selectedFile = fileChooser.showOpenDialog(null);
-                ta.clear();
-                ta.setText(selectedFile.getName());
+               if(selectedFile != null)
+               {
+                try
+               {
+                 FileInputStream fis = new FileInputStream(selectedFile);
+                 int size = fis.available();
+                 byte[] b = new byte[size];
+                 fis.read(b);
+                 ta.setText(new String(b));
+                 fis.close();
+               }
+               catch (FileNotFoundException e)
+               {
+                e.printStackTrace();
+               }
+               catch(IOException e)
+               {
+                e.printStackTrace();
+               }
+                }
+               
+                //ta.clear();
+                //ta.setText(selectedFile.getName());
                         
         }
         });
+
         fileoptions[2].setOnAction(new EventHandler<ActionEvent>(){
             public void handle(ActionEvent event) {
                 FileChooser fileChooser = new FileChooser();
-                fileChooser.setTitle("Save File");
+                fileChooser.setTitle("Open HIGH File");
+                File selectedFile = fileChooser.showOpenDialog(null);
+               
+                if(selectedFile != null)
+                {
+                try
+               {
+                 FileInputStream fis = new FileInputStream(selectedFile);
+                 DataInputStream highstream = new DataInputStream(fis); 
+                 
+
+                 ta.setText(highstream.readUTF());
+
+                 highstream.close();
+                 
+               }
+               catch (FileNotFoundException e)
+               {
+                e.printStackTrace();
+               }
+               catch(IOException e)
+               {
+                e.printStackTrace();
+               }
+            }            
+            }
+        });
+
+
+        fileoptions[3].setOnAction(new EventHandler<ActionEvent>(){
+            public void handle(ActionEvent event) {
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Save LOW File");
                 File selectedFile = fileChooser.showSaveDialog(null);
                 
-                ta.clear();
-                ta.setText(selectedFile.getName());
+                if(file != null)
+                {
+                 try
+                 {  
+                    FileOutputStream fos = new FileOutputStream(selectedFile);
+                    byte[] b = ta.getText().getBytes();
+                    fos.write(b);
+                    fos.close(); 
+
+                   
+                }
+                catch (FileNotFoundException e)
+                {
+                 e.printStackTrace();
+                }
+                catch(IOException e)
+                {
+                 e.printStackTrace();
+                }
+                    
+                }
+
+
+                //ta.clear();
+                //ta.setText(selectedFile.getName());
                 
             }
         });
-      
+
+
         fileoptions[4].setOnAction(new EventHandler<ActionEvent>(){
+            public void handle(ActionEvent event) {
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Save HIGH File");
+                File selectedFile = fileChooser.showSaveDialog(null);
+                
+                if(file != null)
+                {
+                 try
+                 {   
+                    FileOutputStream fos = new FileOutputStream(selectedFile);
+                    DataOutputStream highstream = new DataOutputStream(fos); 
+
+                    highstream.writeUTF(ta.getText());
+                    byte[] b = ta.getText().getBytes();
+                    fos.write(b);
+                    fos.close();
+                   
+                }
+                catch (FileNotFoundException e)
+                {
+                 e.printStackTrace();
+                }
+                catch(IOException e)
+                {
+                 e.printStackTrace();
+                }
+                    
+                }
+
+                // ta.clear();
+                // ta.setText(selectedFile.getName());
+                
+            }
+        });
+
+
+      
+        fileoptions[6].setOnAction(new EventHandler<ActionEvent>(){
             public void handle(ActionEvent event) {
                 System.out.println("Application Closed");
                 primaryStage.close();
@@ -158,16 +283,6 @@ public class notepad extends Application {
                 alert.showAndWait();
            }    
         });
-        
-
-        
-        
-        
-        
-        
-        
-
-        
         
 
 

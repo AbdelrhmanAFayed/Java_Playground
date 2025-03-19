@@ -72,6 +72,7 @@ public class LineApplet extends Applet{
 			lines[state].endPoint.y = e.getY();
 			repaint();
 			
+			
 			state++ ;
 
      
